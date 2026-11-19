@@ -8,49 +8,43 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-            $products = Product::all();
+        $products = Product::with('supplier')->get();
 
-            return view('product.index', compact('products'));
+        return view('product.index', compact('products'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-            $supplier = Supplier::get();
+        $supplier = Supplier::all();
 
-            return view('product.create', compact('supplier'));
+        return view('product.create', compact('supplier'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        Product::create($request->toArray());
+        $validated = $request->validate([
+            'barcode_number' => 'required|string|max:255',
+            'product_name' => 'required|string|max:255',
+            'buy_price' => 'required|integer|min:0',
+            'sell_price' => 'required|integer|min:0',
+            'supplier_id' => 'required|exists:suppliers,id',
+        ]);
 
-        return redirect('/product');
+        Product::create($validated);
+
+        return redirect('/product')
+            ->with('success', 'Produk berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('supplier')->findOrFail($id);
 
         return view('product.show', compact('product'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $product = Product::findOrFail($id);
@@ -59,29 +53,29 @@ class ProductController extends Controller
         return view('product.edit', compact('product', 'supplier'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
+        $validated = $request->validate([
+            'barcode_number' => 'required|string|max:255',
+            'product_name' => 'required|string|max:255',
+            'buy_price' => 'required|integer|min:0',
+            'sell_price' => 'required|integer|min:0',
+            'supplier_id' => 'required|exists:suppliers,id',
+        ]);
+
         $product = Product::findOrFail($id);
+        $product->update($validated);
 
-        $product->update($request->only([
-            'barcode_number',
-            'product_name',
-            'buy_price',
-            'sell_price',
-            'supplier_id',
-        ]));
-
-        return redirect('/product');
+        return redirect('/product')
+            ->with('success', 'Produk berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-        return Product::get();
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return redirect('/product')
+            ->with('success', 'Produk berhasil dihapus.');
     }
 }

@@ -26,11 +26,11 @@ Route :: get('/edit-supplier/{id}', [SupplierController::class, 'edit']);
 Route :: put('/supplier/{id}', [SupplierController::class, 'update']);
 Route :: delete('/supplier/{id}', [SupplierController::class, 'destroy']);
 
-Route :: get('/product', [ProductController::class, 'index']);
-Route :: get('/create-product', [ProductController::class, 'create']);
-Route :: post('/product', [ProductController::class, 'store']);
-Route ::get('/product/{id}', [ProductController::class, 'show']);
-Route ::get('/edit-product/{id}', [ProductController::class, 'edit']);
-Route :: put('/product/{id}', [ProductController::class, 'update']);
-Route :: delete('/product/{id}', [ProductController::class, 'destroy']);
+Route::get('/product', [ProductController::class, 'index']);
+Route::get('/create-product', [ProductController::class, 'create']);
+Route::post('/product', [ProductController::class, 'store']);
+Route::get('/product/{id}', [ProductController::class, 'show']);
+Route::get('/edit-product/{id}', [ProductController::class, 'edit']);
+Route::put('/product/{id}', [ProductController::class, 'update']);
+Route::delete('/product/{id}', [ProductController::class, 'destroy']);
 
