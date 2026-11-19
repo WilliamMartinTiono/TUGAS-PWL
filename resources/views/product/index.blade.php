@@ -10,6 +10,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
   </head>
   <body>
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px;">
+    <h2>Dashboard POS</h2>
+
+    <form action="{{ url('/logout') }}" method="POST">
+        @csrf
+        <button type="submit">
+            Logout
+        </button>
+    </form>
+</div>
     <table class="table table-striped table-hover">
     <tr>
         <th colspan="7">
