@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Exception;
 
 class AuthController extends Controller
 {
@@ -15,6 +16,7 @@ class AuthController extends Controller
     }
 
     // Proses login
+
 
 public function login(Request $request)
 {
@@ -28,19 +30,31 @@ public function login(Request $request)
         'password.string' => 'Password tidak valid.',
     ]);
 
-    if (Auth::attempt($credentials)) {
+    try {
+        // Memeriksa email dan password
+        if (!Auth::attempt($credentials)) {
+            throw new Exception('Invalid Credential');
+        }
+
+        // Mengambil user yang berhasil login
+        $user = Auth::user();
+
+        // Regenerasi session
         $request->session()->regenerate();
 
-        return redirect()->intended('/product')
+        // Redirect setelah login berhasil
+        return redirect('/product')
             ->with('success', 'Login berhasil.');
-    }
 
-    return back()
-        ->withErrors([
-            'email' => 'Email atau password salah.',
-        ])
-        ->onlyInput('email');
+    } catch (Exception $e) {
+
+        // Jika login gagal
+        return back()
+            ->withInput($request->except('password'))
+            ->with('error', 'Email atau Password Anda Salah!');
+    }
 }
+
 
 
     // Menampilkan halaman register

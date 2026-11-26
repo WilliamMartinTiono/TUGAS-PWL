@@ -52,7 +52,10 @@ test('user cannot login with incorrect password', function () {
         'password' => 'wrongpassword',
     ]);
 
-    $response->assertSessionHasErrors('email');
+    $response->assertSessionHas(
+        'error',
+        'Email atau Password Anda Salah!'
+    );
 
     $this->assertGuest();
 });
