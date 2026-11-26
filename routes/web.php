@@ -17,12 +17,16 @@ Route::get('/', function () {
 
 // Login dan Register (di luar middleware auth)
 // Login dan Register (di luar middleware auth)
-Route::get('/login', [AuthController::class, 'loginView']);
+// Login dan Register (di luar middleware auth)
+Route::get('/login', [AuthController::class, 'loginView'])
+    ->name('login');
 
 Route::post('/login', [AuthController::class, 'login'])
     ->middleware('throttle:5,1');
 
-Route::get('/register', [AuthController::class, 'registerView']);
+Route::get('/register', [AuthController::class, 'registerView'])
+    ->name('register');
+
 Route::post('/register', [AuthController::class, 'register']);
 
 // Logout

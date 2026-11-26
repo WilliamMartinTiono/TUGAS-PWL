@@ -15,26 +15,33 @@ class AuthController extends Controller
     }
 
     // Proses login
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+public function login(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|string',
+    ], [
+        'email.required' => 'Email wajib diisi.',
+        'email.email' => 'Format email tidak valid.',
+        'password.required' => 'Password wajib diisi.',
+        'password.string' => 'Password tidak valid.',
+    ]);
 
-            return redirect()->intended('/product')
-                ->with('success', 'Login berhasil.');
-        }
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
 
-        return back()
-            ->withErrors([
-                'email' => 'Email atau password salah.',
-            ])
-            ->onlyInput('email');
+        return redirect()->intended('/product')
+            ->with('success', 'Login berhasil.');
     }
+
+    return back()
+        ->withErrors([
+            'email' => 'Email atau password salah.',
+        ])
+        ->onlyInput('email');
+}
+
 
     // Menampilkan halaman register
     public function registerView()
